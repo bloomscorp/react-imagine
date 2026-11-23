@@ -1,0 +1,74 @@
+{
+  "name": "@bloomscorp/react-imagine",
+  "version": "0.1.0",
+  "description": "React hooks for Imagine: <ImagineProvider>, useImagine(), useJob() and useCreateJob(), on @bloomscorp/imagine.js.",
+  "type": "commonjs",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "lint": "tsc --noEmit",
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "verify:package": "node scripts/verify-package.mjs",
+    "pack:check": "npm pack --dry-run"
+  },
+  "keywords": [
+    "imagine",
+    "bloomscorp",
+    "blooms-ai",
+    "image-generation",
+    "react",
+    "hooks"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT",
+  "author": "Bloomscorp",
+  "homepage": "https://github.com/bloomscorp/react-imagine",
+  "bugs": {
+    "url": "https://github.com/bloomscorp/react-imagine/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bloomscorp/react-imagine.git"
+  },
+  "peerDependencies": {
+    "@bloomscorp/imagine.js": "^0.1.0",
+    "react": ">=18.0.0 <20.0.0"
+  },
+  "devDependencies": {
+    "@bloomscorp/imagine.js": "^0.1.0",
+    "@testing-library/react": "^16.3.3",
+    "@types/node": "^24.19.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "jsdom": "^27.0.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.12"
+  }
+}

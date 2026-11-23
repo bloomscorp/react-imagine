@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ['20', '22', '24']
+        # The peer range is React 18 and 19; both are tested.
+        react: ['18', '19']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      # During development package.json may point at a local copy of the core
+      # (file:../imagine.js), which does not exist here. RELEASING.md says when to
+      # switch to the published one.
+      - name: The core comes from npm
+        run: |
+          if node -e "process.exit(String(require('./package.json').devDependencies['@bloomscorp/imagine.js']).startsWith('file:') ? 0 : 1)"; then
+            echo "::error::package.json uses file:../imagine.js. Publish @bloomscorp/imagine.js, then: npm install -D @bloomscorp/imagine.js@^0.1.0 (RELEASING.md)"
+            exit 1
+          fi
+
+      - run: npm ci
+      - name: React ${{ matrix.react }}
+        if: matrix.react != '19'
+        run: npm install --no-save react@${{ matrix.react }} react-dom@${{ matrix.react }} @types/react@${{ matrix.react }} @types/react-dom@${{ matrix.react }}
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+      # The tarball holds exactly the intended files, loads as CommonJS and ESM,
+      # starts with "use client", and imports only its peers.
+      - run: npm run verify:package
